@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from rest_framework_expiring_authtoken import views
+from rest_framework_expiring_authtoken.views import obtain_expiring_auth_token
+from maze_eval.views import register
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api-token-auth/', views.obtain_expiring_auth_token),
+    url(r'^api-token-auth/', obtain_expiring_auth_token),
+    url(r'^register/', register)
 ]
