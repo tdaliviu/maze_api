@@ -21,6 +21,6 @@ from maze_eval.views import register
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api-token-auth/', obtain_expiring_auth_token),
+    url(r'^obtain_token/', obtain_expiring_auth_token),
     url(r'^register/', register)
 ]
