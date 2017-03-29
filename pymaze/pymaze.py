@@ -38,9 +38,6 @@ class Maze(object):
     def get_entry_position(self):
         return Maze.get_portal_position(self._maze, ENTRY_PORTAL)
 
-    def get_exit_position(self):
-        return Maze.get_portal_position(self._maze, EXIT_PORTAL)
-
     @staticmethod
     def get_portal_position(maze, portal_type):
         coords = {'x': -1, 'y': -1}
