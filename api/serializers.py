@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from maze_eval.models import Snippet
+from api.models import Snippet
 
 
 class UserSerializer(serializers.ModelSerializer):

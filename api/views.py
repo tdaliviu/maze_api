@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_expiring_authtoken import authentication
 
-from maze_eval.serializers import UserSerializer, SnippetSerializer
+from api.serializers import UserSerializer, SnippetSerializer
 
 
 class UserList(APIView):
