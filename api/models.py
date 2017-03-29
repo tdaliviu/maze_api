@@ -9,3 +9,14 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+
+class Maze(models.Model):
+    maze = models.TextField()
+
+
+class EvaluationResult(models.Model):
+    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    snippet = models.ForeignKey('api.Snippet', on_delete=models.CASCADE)
+    maze = models.ForeignKey('api.Maze', on_delete=models.CASCADE)
+    steps = models.IntegerField(default=0)  # 0 stands for 'did not finish maze' (i.e. timeout)
