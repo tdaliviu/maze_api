@@ -16,7 +16,12 @@ class Maze(models.Model):
 
 
 class EvaluationResult(models.Model):
-    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     snippet = models.ForeignKey('api.Snippet', on_delete=models.CASCADE)
     maze = models.ForeignKey('api.Maze', on_delete=models.CASCADE)
     steps = models.IntegerField(default=0)  # 0 stands for 'did not finish maze' (i.e. timeout)
+
+
+class EvaluationRunLog(models.Model):
+    started = models.DateTimeField()
+    ended = models.DateTimeField(null=True)
+    mazes_evaluated = models.IntegerField(default=0)
