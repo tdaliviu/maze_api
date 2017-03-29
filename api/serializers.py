@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -33,5 +35,6 @@ class SnippetSerializer(serializers.ModelSerializer):
         """
         instance.code = validated_data.get('code', instance.code)
         instance.language = validated_data.get('language', instance.language)
+        instance.created = datetime.now()
         instance.save()
         return instance
