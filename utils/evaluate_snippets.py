@@ -48,7 +48,7 @@ def evaluate_snippets():
         last_eval_run_log_date = timezone.now()
 
     # Select all new snippets since last evaluation
-    snippets = Snippet.objects.filter(created__lte=last_eval_run_log_date)
+    snippets = Snippet.objects.filter(created__gte=last_eval_run_log_date)
 
     # Select all mazes
     mazes = Maze_.objects.all()
@@ -64,19 +64,19 @@ def evaluate_snippets():
         # Iterate through selected mazes
         for maze_ in mazes:
             try:
-                with time_limit(10):
+                with time_limit(3):
                     # Run snippet code against maze
-                    maze = Maze(json.loads(maze_))
+                    maze = Maze(json.loads(maze_.maze))
 
                     exec snippet.code
 
                     # Get step count
-                    steps = maze.get_history() - 1
+                    steps = len(maze.get_history()) - 1 if maze.is_maze_solved() else 0
             except TimeoutException, msg:
                 steps = 0
 
             # Store evaluation results
-            EvaluationResult.objects.create(EvaluationResult(maze=maze_, snippet=snippet, steps=steps))
+            EvaluationResult.objects.create(maze=maze_, snippet=snippet, steps=steps)
 
             # Increment evaluated mazes counter
             mazes_evaluated = mazes_evaluated + 1
@@ -85,7 +85,7 @@ def evaluate_snippets():
     ended = timezone.now()
 
     # Store evaluation run results
-    EvaluationRunLog.objects.create(EvaluationRunLog(started=started, ended=ended, mazes_evaluated=mazes_evaluated))
+    EvaluationRunLog.objects.create(started=started, ended=ended, mazes_evaluated=mazes_evaluated)
 
 
 if __name__ == '__main__':
