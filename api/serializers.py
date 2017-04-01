@@ -38,3 +38,8 @@ class SnippetSerializer(serializers.ModelSerializer):
         instance.created = datetime.now()
         instance.save()
         return instance
+
+
+class OverallScoreboardSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    rank = serializers.IntegerField()
