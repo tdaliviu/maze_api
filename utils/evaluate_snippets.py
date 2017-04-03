@@ -61,14 +61,20 @@ def evaluate_snippets():
 
     # Iterate through selected snippets
     for snippet in snippets:
+        # Delete snippet evaluation results
+        snippet.evaluation_results.all().delete()
+
         # Iterate through selected mazes
         for maze_ in mazes:
             try:
-                with time_limit(60):
+                with time_limit(10):
                     # Run snippet code against maze
                     maze = Maze(json.loads(maze_.maze))
 
-                    exec snippet.code
+                    try:
+                        exec snippet.code
+                    except Exception as e:
+                        print(e.message)  # Catch all exceptions
 
                     # Get step count
                     steps = len(maze.get_history()) - 1 if maze.is_maze_solved() else 0

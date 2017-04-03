@@ -17,8 +17,8 @@ class Maze(models.Model):
 
 
 class EvaluationResult(models.Model):
-    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE, related_name='snippets')
-    maze = models.ForeignKey(Maze, on_delete=models.CASCADE, related_name='mazes')
+    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE, related_name='evaluation_results')
+    maze = models.ForeignKey(Maze, on_delete=models.CASCADE, related_name='evaluation_results')
     steps = models.IntegerField(default=0)  # 0 stands for 'did not finish maze' (i.e. timeout)
 
 

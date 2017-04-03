@@ -38,6 +38,9 @@ class Maze(object):
     def get_entry_position(self):
         return Maze.get_portal_position(self._maze, ENTRY_PORTAL)
 
+    def get_exit_position(self):
+        return Maze.get_portal_position(self._maze, EXIT_PORTAL)
+
     @staticmethod
     def get_portal_position(maze, portal_type):
         coords = {'x': -1, 'y': -1}
@@ -59,7 +62,8 @@ class Maze(object):
     def _set_current_position(self, x, y):
         if self._check_free(x, y):
             self._current_coords = {'x': x, 'y': y}
-            self._history.append(self._current_coords)
+
+        self._history.append(self._current_coords)
 
     def _check_in_maze(self, x, y):
         return x >= 0 and y >= 0 and y < len(self._maze) and x < len(self._maze[y])
@@ -103,7 +107,7 @@ class Maze(object):
             'y': self._current_coords['y'] + dy
         }
 
-        if self._check_in_maze(new_coords['x'], new_coords['y']) and self._check_free(new_coords['x'], new_coords['y']):
+        if self._check_in_maze(new_coords['x'], new_coords['y']):
             self._set_current_position(new_coords['x'], new_coords['y'])
 
     def is_maze_solved(self):
