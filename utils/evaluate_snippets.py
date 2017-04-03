@@ -64,7 +64,7 @@ def evaluate_snippets():
         # Iterate through selected mazes
         for maze_ in mazes:
             try:
-                with time_limit(3):
+                with time_limit(60):
                     # Run snippet code against maze
                     maze = Maze(json.loads(maze_.maze))
 
