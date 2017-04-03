@@ -86,7 +86,10 @@ class ScoreList(APIView):
         overall_scoreboard = []
         overall_rank = 1
         for i in range(0, len(user_maze_rank_sums)):
+            user = User.objects.get(username=user_maze_rank_sums[i]['username'])
             overall_rank_record = {'username': user_maze_rank_sums[i]['username'],
+                                   'first_name': user.first_name,
+                                   'last_name': user.last_name,
                                    'rank': overall_rank}
             overall_scoreboard.append(overall_rank_record)
             if i + 1 < len(user_maze_rank_sums) and user_maze_rank_sums[i + 1]['maze_rank_sum'] != user_maze_rank_sums[i]['maze_rank_sum']:

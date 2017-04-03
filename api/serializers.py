@@ -9,7 +9,7 @@ from api.models import Snippet
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name')
 
     def create(self, validated_data):
         User.objects.create_user(**validated_data)
@@ -42,4 +42,6 @@ class SnippetSerializer(serializers.ModelSerializer):
 
 class OverallScoreboardSerializer(serializers.Serializer):
     username = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     rank = serializers.IntegerField()
