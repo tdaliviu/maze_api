@@ -6,9 +6,10 @@ import json
 import os
 
 import django.db.models.deletion
-import pymaze
 from django.conf import settings
 from django.db import migrations, models
+
+import pymaze
 
 
 def forwards_func(apps, schema_editor):
