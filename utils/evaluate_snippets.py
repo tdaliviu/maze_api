@@ -45,10 +45,10 @@ def evaluate_snippets():
     try:
         last_eval_run_log_date = EvaluationRunLog.objects.latest('ended').ended
     except EvaluationRunLog.DoesNotExist:
-        last_eval_run_log_date = timezone.now()
+        last_eval_run_log_date = None
 
     # Select all new snippets since last evaluation
-    snippets = Snippet.objects.filter(created__gte=last_eval_run_log_date)
+    snippets = Snippet.objects.filter(created__gte=last_eval_run_log_date) if last_eval_run_log_date is not None else Snippet.objects.all()
 
     # Select all mazes
     mazes = Maze_.objects.all()
