@@ -9,13 +9,11 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import pymaze
-
 
 def forwards_func(apps, schema_editor):
     Maze = apps.get_model("api", "Maze")
     db_alias = schema_editor.connection.alias
-    maze_file = os.path.join(pymaze.__path__[0], 'mazes.json')
+    maze_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mazes.json')
     with open(maze_file) as data_file:
         mazes = json.load(data_file)
     Maze.objects.using(db_alias).bulk_create([
