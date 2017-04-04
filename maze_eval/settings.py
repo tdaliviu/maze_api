@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_expiring_authtoken',
+    'django_beanstalkd',
 
     'api'
 ]
@@ -128,3 +129,4 @@ STATIC_URL = '/static/'
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(hours=8)
 
 MAZE_EVALUATION_API_ENDPOINT = os.getenv('MAZE_EVALUATION_API_ENDPOINT', None)
+BEANSTALK_SERVER = os.getenv('BEANSTALK_SERVER', None)

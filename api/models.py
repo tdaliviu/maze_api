@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 class Snippet(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
     code = models.TextField()
     language = models.CharField(default='python', max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='snippets')

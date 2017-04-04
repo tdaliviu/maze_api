@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework import serializers
 
 from api.models import Snippet
@@ -35,7 +34,7 @@ class SnippetSerializer(serializers.ModelSerializer):
         """
         instance.code = validated_data.get('code', instance.code)
         instance.language = validated_data.get('language', instance.language)
-        instance.created = datetime.now()
+        instance.created = timezone.now()
         instance.save()
         return instance
 
