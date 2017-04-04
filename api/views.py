@@ -1,12 +1,16 @@
+import requests
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Max, Case, When, Value, IntegerField, F
+from django.utils import timezone
+from requests.exceptions import Timeout
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_expiring_authtoken import authentication
 
-from api.models import EvaluationResult, Maze
+from api.models import EvaluationResult, Maze, EvaluationRunLog, Snippet
 from api.serializers import UserSerializer, SnippetSerializer, OverallScoreboardSerializer
 
 
@@ -38,6 +42,51 @@ class SnippetList(APIView):
 
         serializer = SnippetSerializer(data=request.data)
         if serializer.is_valid():
+            # Find last evaluation run
+            try:
+                last_eval_run_log_date = EvaluationRunLog.objects.latest('ended').ended
+            except EvaluationRunLog.DoesNotExist:
+                last_eval_run_log_date = None
+
+            # Select all new snippets since last evaluation
+            snippets = Snippet.objects.filter(
+                created__gte=last_eval_run_log_date) if last_eval_run_log_date is not None else Snippet.objects.all()
+
+            # Select all mazes
+            mazes = Maze.objects.all()
+
+            # Set evaluation run started
+            started = timezone.now()
+
+            # Set evaluated mazes counter
+            mazes_evaluated = 0
+
+            # Iterate through selected snippets
+            for snippet in snippets:
+                # Delete snippet evaluation results
+                snippet.evaluation_results.all().delete()
+
+                # Iterate through selected mazes
+                for maze in mazes:
+                    try:
+                        # Run user snippet code against maze
+                        response = requests.post(settings.MAZE_EVALUATION_API_ENDPOINT, json={'maze': maze, 'snippet': snippet.code})
+                        steps = response.json()['steps']
+                    except (Timeout, KeyError):  # HTTP request has timed out or the result JSON does not contain 'steps'
+                        steps = 0
+
+                    # Store evaluation results
+                    EvaluationResult.objects.create(maze=maze, snippet=snippet, steps=steps)
+
+                    # Increment evaluated mazes counter
+                    mazes_evaluated = mazes_evaluated + 1
+
+            # Set evaluation run ended
+            ended = timezone.now()
+
+            # Store evaluation run results
+            EvaluationRunLog.objects.create(started=started, ended=ended, mazes_evaluated=mazes_evaluated)
+
             serializer.save(owner=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

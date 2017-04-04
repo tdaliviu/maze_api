@@ -126,3 +126,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(hours=8)
+
+MAZE_EVALUATION_API_ENDPOINT = os.getenv('MAZE_EVALUATION_API_ENDPOINT', None)
