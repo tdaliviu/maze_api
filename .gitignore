@@ -52,7 +52,7 @@ venv/
 ENV/
 .spyderproject
 .ropeproject
-.idea/**
+.idea/
 *.iws
 /out/
 .idea_modules/
@@ -62,3 +62,4 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 db.sqlite3
+static/

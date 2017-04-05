@@ -1,27 +1,34 @@
 import json
 
 import django_beanstalkd
+import logging
 import requests
 from django.conf import settings
 from django.utils import timezone
 
 from api.models import EvaluationRunLog, Snippet, Maze, EvaluationResult
 
+logger = logging.getLogger(__name__)
+
 
 @django_beanstalkd.beanstalk_job
 def evaluate(arg):
     # Find last evaluation run
     try:
-        last_eval_run_log_date = EvaluationRunLog.objects.latest('ended').ended
+        last_eval_run_log_date = EvaluationRunLog.objects.latest('started').started
     except EvaluationRunLog.DoesNotExist:
         last_eval_run_log_date = None
+
+    logger.info('Last evaluation started at: {}'.format(last_eval_run_log_date))
+
+    # Set evaluation run started
+    started = timezone.now()
 
     # Select all new snippets since last evaluation
     snippets = Snippet.objects.filter(
         created__gte=last_eval_run_log_date) if last_eval_run_log_date is not None else Snippet.objects.all()
 
-    # Set evaluation run started
-    started = timezone.now()
+    logger.info('User code snippets found since last evaluation: {}'.format(snippets.count()))
 
     # Set evaluated mazes counter
     mazes_evaluated = 0

@@ -130,3 +130,5 @@ EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(hours=8)
 
 MAZE_EVALUATION_API_ENDPOINT = os.getenv('MAZE_EVALUATION_API_ENDPOINT', None)
 BEANSTALK_SERVER = os.getenv('BEANSTALK_SERVER', None)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
