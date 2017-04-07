@@ -18,11 +18,11 @@ COPY supervisor-app.conf /etc/supervisor/conf.d/
 # to prevent re-installinig (all your) dependencies when you made a change a line or two in your app.
 
 RUN mkdir /home/docker/
-RUN mkdir /home/docker/code/
-RUN mkdir /home/docker/code/app/
+RUN mkdir /home/docker/api/
+RUN mkdir /home/docker/api/app/
 
-COPY ./app/requirements.txt /home/docker/code/app/
-RUN pip install -r /home/docker/code/app/requirements.txt
+COPY ./app/requirements.txt /home/docker/api/app/
+RUN pip install -r /home/docker/api/app/requirements.txt
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
