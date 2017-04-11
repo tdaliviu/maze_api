@@ -63,3 +63,6 @@ crashlytics-build.properties
 fabric.properties
 db.sqlite3
 static_django/
+
+privatekey.pem
+server.crt
