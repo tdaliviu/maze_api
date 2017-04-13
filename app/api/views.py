@@ -70,6 +70,10 @@ class ScoreList(APIView):
                 .annotate(username=F('snippet__owner__username')) \
                 .values('username', 'steps')
             max_steps = queryset.aggregate(Max('steps'))['steps__max']
+
+            if max_steps is None:
+                return Response([])
+
             evaluation_results = queryset \
                 .annotate(steps_replace=Case(When(steps=0, then=Value(max_steps + 1)), default=F('steps'),
                                              output_field=IntegerField())) \
@@ -100,8 +104,9 @@ class ScoreList(APIView):
             if i + 1 < len(user_maze_rank_sums) and user_maze_rank_sums[i + 1]['maze_rank_sum'] != user_maze_rank_sums[i]['maze_rank_sum']:
                 overall_rank = overall_rank + 1
 
-        serializer = OverallScoreboardSerializer(data=overall_scoreboard, many=True)
+        serializer = OverallScoreboardSerializer(overall_scoreboard, many=True)
 
-        if serializer.is_valid():
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        #if serializer.is_valid():
+        return Response(serializer.data)
+        #return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
