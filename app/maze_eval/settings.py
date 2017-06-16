@@ -26,7 +26,7 @@ SECRET_KEY = 'uoddm58!m&w0vly#jbr&pb5wrl^$33f6g5nkcn@n29eb2szdux'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False if os.getenv('DJANGO_DEBUG', 'False') == 'False' else True
 
-ALLOWED_HOSTS = ['192.168.99.100', 'localhost', '.2hard4u.eu']
+ALLOWED_HOSTS = ['192.168.99.100', 'localhost', '.cloudsquad.lt']
 
 
 # Application definition

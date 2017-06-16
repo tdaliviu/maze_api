@@ -34,9 +34,6 @@ class SnippetList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        if request.user.snippets.all().count() > 0:
-            return Response('User already has a submitted code snippet. Use PUT to update', status=status.HTTP_400_BAD_REQUEST)
-
         serializer = SnippetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
@@ -46,11 +43,6 @@ class SnippetList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, format=None):
-        try:
-            snippet = request.user.snippets.first()
-        except User.DoesNotExist:
-            return Response('User has no code snippet submitted. Use POST to submit', status=status.HTTP_400_BAD_REQUEST)
-
         serializer = SnippetSerializer(snippet, data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
